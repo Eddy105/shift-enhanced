@@ -30,8 +30,8 @@ private fun ShiftEnhancedApp() {
     val batteryManager = remember(context) {
         context.getSystemService(BatteryManager::class.java)
     }
-    val telemetry = remember(batteryManager) {
-        batteryManager?.let(::readPowerTelemetry)
+    val telemetry = remember(context, batteryManager) {
+        batteryManager?.let { readPowerTelemetry(context, it) }
     }
 
     MaterialTheme {
@@ -44,6 +44,9 @@ private fun ShiftEnhancedApp() {
                 Text("Power Foundation", style = MaterialTheme.typography.titleMedium)
                 Text("Battery: ${telemetry?.capacityPercent ?: 0}%")
                 Text("Current: ${telemetry?.currentMilliamps ?: 0} mA")
+                telemetry?.temperatureCelsius?.let { Text("Temperature: %.1f °C".format(it)) }
+                telemetry?.voltageMillivolts?.let { Text("Voltage: $it mV") }
+                Text(if (telemetry?.isCharging == true) "Status: Charging" else "Status: Not charging")
                 Text("Battery telemetry is read locally on the device.")
             }
         }
