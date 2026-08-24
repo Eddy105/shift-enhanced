@@ -1,5 +1,7 @@
 package de.eddy105.shift.enhanced
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -30,8 +32,15 @@ private fun ShiftEnhancedApp() {
     val batteryManager = remember(context) {
         context.getSystemService(BatteryManager::class.java)
     }
-    val telemetry = remember(batteryManager) {
-        batteryManager?.let(::readPowerTelemetry)
+    val batteryIntent = remember(context) {
+        context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+    }
+    val telemetry = remember(batteryManager, batteryIntent) {
+        if (batteryManager != null && batteryIntent != null) {
+            readPowerTelemetry(batteryManager, batteryIntent)
+        } else {
+            null
+        }
     }
 
     MaterialTheme {
@@ -44,6 +53,9 @@ private fun ShiftEnhancedApp() {
                 Text("Power Foundation", style = MaterialTheme.typography.titleMedium)
                 Text("Battery: ${telemetry?.capacityPercent ?: 0}%")
                 Text("Current: ${telemetry?.currentMilliamps ?: 0} mA")
+                Text("Temperature: ${telemetry?.temperatureCelsius?.let { "%.1f °C".format(it) } ?: "Unavailable"}")
+                Text("Voltage: ${telemetry?.voltageVolts?.let { "%.2f V".format(it) } ?: "Unavailable"}")
+                Text("Charging: ${if (telemetry?.isCharging == true) "Yes" else "No"}")
                 Text("Battery telemetry is read locally on the device.")
             }
         }

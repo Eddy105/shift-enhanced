@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Extend power telemetry with battery temperature and voltage
+- Expose charging state in the dashboard
+- Add safe handling for unavailable battery fields
+- Expand telemetry model tests
+
 ## 0.1.0
 
 - Initial Android application foundation
