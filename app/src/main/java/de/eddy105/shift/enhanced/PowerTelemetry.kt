@@ -26,9 +26,20 @@ data class PowerTelemetry(
             status == BatteryManager.BATTERY_STATUS_FULL
 }
 
-fun readPowerTelemetry(manager: BatteryManager, batteryIntent: Intent): PowerTelemetry = PowerTelemetry(
-    capacityPercent = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY),
-    currentMicros = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW),
+fun readPowerTelemetry(manager: BatteryManager, batteryIntent: Intent): PowerTelemetry =
+    readPowerTelemetry(
+        capacityPercent = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY),
+        currentMicros = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW),
+        batteryIntent = batteryIntent
+    )
+
+fun readPowerTelemetry(
+    capacityPercent: Int,
+    currentMicros: Int,
+    batteryIntent: Intent
+): PowerTelemetry = PowerTelemetry(
+    capacityPercent = capacityPercent,
+    currentMicros = currentMicros,
     temperatureTenthsC = batteryIntent.optionalInt(BatteryManager.EXTRA_TEMPERATURE),
     voltageMillivolts = batteryIntent.optionalInt(BatteryManager.EXTRA_VOLTAGE),
     status = batteryIntent.getIntExtra(
