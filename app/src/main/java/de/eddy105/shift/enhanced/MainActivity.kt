@@ -14,22 +14,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            ShiftEnhancedApp()
-        }
+        setContent { ShiftEnhancedApp() }
     }
 }
 
 @Composable
 private fun ShiftEnhancedApp() {
-    val batteryManager = remember { androidx.compose.ui.platform.LocalContext.current.getSystemService(BatteryManager::class.java) }
-    val capacity = batteryManager?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY) ?: 0
-    val current = batteryManager?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW) ?: 0
+    val context = LocalContext.current
+    val batteryManager = remember(context) {
+        context.getSystemService(BatteryManager::class.java)
+    }
+    val telemetry = remember(batteryManager) {
+        batteryManager?.let(::readPowerTelemetry)
+    }
 
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -39,8 +42,8 @@ private fun ShiftEnhancedApp() {
             ) {
                 Text("SHIFT Enhanced", style = MaterialTheme.typography.headlineMedium)
                 Text("Power Foundation", style = MaterialTheme.typography.titleMedium)
-                Text("Battery: $capacity%")
-                Text("Current: ${current / 1000} mA")
+                Text("Battery: ${telemetry?.capacityPercent ?: 0}%")
+                Text("Current: ${telemetry?.currentMilliamps ?: 0} mA")
                 Text("Battery telemetry is read locally on the device.")
             }
         }
