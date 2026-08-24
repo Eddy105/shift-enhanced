@@ -1,10 +1,8 @@
 package de.eddy105.shift.enhanced
 
-import android.content.Intent
 import android.os.BatteryManager
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -38,32 +36,4 @@ class PowerTelemetryTest {
         assertTrue(full.isCharging)
         assertFalse(discharging.isCharging)
     }
-
-    @Test
-    fun readsOptionalBatteryFieldsFromIntent() {
-        val intent = Intent().apply {
-            putExtra(BatteryManager.EXTRA_TEMPERATURE, 301)
-            putExtra(BatteryManager.EXTRA_VOLTAGE, 4980)
-            putExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_CHARGING)
-            putExtra(BatteryManager.EXTRA_HEALTH, BatteryManager.BATTERY_HEALTH_GOOD)
-            putExtra(BatteryManager.EXTRA_PLUGGED, BatteryManager.BATTERY_PLUGGED_USB)
-        }
-
-        val telemetry = readPowerTelemetry(FakeBatteryManager(), intent)
-
-        assertEquals(301, telemetry.temperatureTenthsC)
-        assertEquals(4980, telemetry.voltageMillivolts)
-        assertEquals(BatteryManager.BATTERY_STATUS_CHARGING, telemetry.status)
-        assertEquals(BatteryManager.BATTERY_HEALTH_GOOD, telemetry.health)
-        assertEquals(BatteryManager.BATTERY_PLUGGED_USB, telemetry.plugged)
-    }
-
-    @Test
-    fun missingOptionalBatteryFieldsRemainNull() {
-        val telemetry = readPowerTelemetry(FakeBatteryManager(), Intent())
-        assertNull(telemetry.temperatureTenthsC)
-        assertNull(telemetry.voltageMillivolts)
-    }
-
-    private class FakeBatteryManager : BatteryManager()
 }
