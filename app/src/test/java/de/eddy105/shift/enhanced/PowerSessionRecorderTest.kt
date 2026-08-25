@@ -12,10 +12,11 @@ class PowerSessionRecorderTest {
         val telemetry = PowerTelemetry(
             capacityPercent = 80,
             currentMicros = 1_500_000,
-            temperatureTenthsCelsius = null,
+            temperatureTenthsC = null,
             voltageMillivolts = null,
-            status = null,
-            health = null
+            status = 0,
+            health = 0,
+            plugged = 0
         )
 
         recorder.record(telemetry)
@@ -34,10 +35,11 @@ class PowerSessionRecorderTest {
             PowerTelemetry(
                 capacityPercent = 50,
                 currentMicros = 500_000,
-                temperatureTenthsCelsius = null,
+                temperatureTenthsC = null,
                 voltageMillivolts = null,
-                status = null,
-                health = null
+                status = 0,
+                health = 0,
+                plugged = 0
             )
         )
 
