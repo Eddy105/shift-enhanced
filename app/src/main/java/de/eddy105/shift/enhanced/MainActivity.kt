@@ -59,7 +59,7 @@ private fun ShiftEnhancedApp() {
     }
 }
 
-private fun formatDuration(durationMillis: Long): String {
+internal fun formatDuration(durationMillis: Long): String {
     val totalSeconds = durationMillis / 1_000
     val hours = totalSeconds / 3_600
     val minutes = (totalSeconds % 3_600) / 60
