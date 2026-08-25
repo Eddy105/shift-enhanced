@@ -17,7 +17,7 @@ class PowerSessionDerivedMetricsTest {
         assertEquals(3, metrics.sampleCount)
         assertEquals(-900, metrics.minimumCurrentMilliamps)
         assertEquals(-400, metrics.maximumCurrentMilliamps)
-        assertEquals(-2, metrics.capacityDeltaPercent)
+        assertEquals(Integer.valueOf(-2), metrics.capacityDeltaPercent)
         assertEquals(31.0, metrics.averageTemperatureCelsius, 0.001)
     }
 
