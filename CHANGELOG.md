@@ -5,7 +5,7 @@
 - Add session battery drain rate derived from capacity change and elapsed time
 - Surface battery drain rate in the Power Center
 - Add session-based estimated remaining battery runtime
-- Avoid runtime estimates for charging, missing capacity, empty battery, or invalid drain rates
+- Avoid runtime estimates for charging, missing capacity, insufficient samples, empty battery, or invalid drain rates
 - Cover battery analytics and runtime edge cases with unit tests
 
 ## 0.1.2
