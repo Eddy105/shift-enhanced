@@ -36,6 +36,8 @@ private fun ShiftEnhancedApp() {
         telemetry?.let { session = recorder.record(it) }
     }
 
+    val metrics = session.metrics()
+
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -50,9 +52,12 @@ private fun ShiftEnhancedApp() {
                 Text("Voltage: ${telemetry?.voltageVolts?.let { "%.2f V".format(it) } ?: "Unavailable"}")
                 Text("Charging: ${if (telemetry?.isCharging == true) "Yes" else "No"}")
                 Text("Session Analytics", style = MaterialTheme.typography.titleMedium)
-                Text("Samples: ${session.samples.size}")
+                Text("Samples: ${metrics.sampleCount}")
                 Text("Session duration: ${formatDuration(session.durationMillis)}")
                 Text("Average current: ${session.averageCurrentMilliamps?.let { "$it mA" } ?: "Unavailable"}")
+                Text("Current range: ${metrics.minimumCurrentMilliamps?.let { "${metrics.minimumCurrentMilliamps} to ${metrics.maximumCurrentMilliamps} mA" } ?: "Unavailable"}")
+                Text("Battery change: ${metrics.capacityDeltaPercent?.let { "$it%" } ?: "Unavailable"}")
+                Text("Average temperature: ${metrics.averageTemperatureCelsius?.let { "%.1f °C".format(it) } ?: "Unavailable"}")
                 Text("Session data is kept in memory and is not persisted.")
             }
         }
@@ -64,9 +69,6 @@ internal fun formatDuration(durationMillis: Long): String {
     val hours = totalSeconds / 3_600
     val minutes = (totalSeconds % 3_600) / 60
     val seconds = totalSeconds % 60
-    return if (hours > 0) {
-        "%dh %02dm %02ds".format(hours, minutes, seconds)
-    } else {
-        "%02dm %02ds".format(minutes, seconds)
-    }
+    return if (hours > 0) "%dh %02dm %02ds".format(hours, minutes, seconds)
+    else "%02dm %02ds".format(minutes, seconds)
 }

@@ -6,7 +6,9 @@ package de.eddy105.shift.enhanced
  */
 data class PowerSample(
     val timestampMillis: Long,
-    val currentMilliamps: Int
+    val currentMilliamps: Int,
+    val capacityPercent: Int? = null,
+    val temperatureCelsius: Double? = null
 )
 
 data class PowerSession(

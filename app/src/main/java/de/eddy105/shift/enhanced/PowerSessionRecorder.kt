@@ -14,7 +14,9 @@ class PowerSessionRecorder(
         session = session.addSample(
             PowerSample(
                 timestampMillis = clockMillis(),
-                currentMilliamps = telemetry.currentMilliamps
+                currentMilliamps = telemetry.currentMilliamps,
+                capacityPercent = telemetry.capacityPercent,
+                temperatureCelsius = telemetry.temperatureCelsius
             )
         )
         return session
