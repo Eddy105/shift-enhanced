@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add session battery drain rate derived from capacity change and elapsed time
+- Surface battery drain rate in the Power Center
+- Cover drain-rate calculations and zero-duration handling with unit tests
+
 ## 0.1.2
 
 - Add live in-memory power session recording
