@@ -37,6 +37,7 @@ private fun ShiftEnhancedApp() {
     }
 
     val metrics = session.metrics()
+    val runtimeMinutes = metrics.estimatedRuntimeMinutes(telemetry?.capacityPercent)
 
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -58,6 +59,7 @@ private fun ShiftEnhancedApp() {
                 Text("Current range: ${metrics.minimumCurrentMilliamps?.let { "${metrics.minimumCurrentMilliamps} to ${metrics.maximumCurrentMilliamps} mA" } ?: "Unavailable"}")
                 Text("Battery change: ${metrics.capacityDeltaPercent?.let { "$it%" } ?: "Unavailable"}")
                 Text("Battery drain rate: ${metrics.batteryDrainPercentPerHour?.let { "%.2f%%/h".format(it) } ?: "Unavailable"}")
+                Text("Estimated runtime: ${runtimeMinutes?.let { formatRuntime(it) } ?: "Unavailable"}")
                 Text("Average temperature: ${metrics.averageTemperatureCelsius?.let { "%.1f °C".format(it) } ?: "Unavailable"}")
                 Text("Session data is kept in memory and is not persisted.")
             }
@@ -72,4 +74,11 @@ internal fun formatDuration(durationMillis: Long): String {
     val seconds = totalSeconds % 60
     return if (hours > 0) "%dh %02dm %02ds".format(hours, minutes, seconds)
     else "%02dm %02ds".format(minutes, seconds)
+}
+
+internal fun formatRuntime(minutes: Long): String {
+    val hours = minutes / 60
+    val remainingMinutes = minutes % 60
+    return if (hours > 0) "%dh %02dm".format(hours, remainingMinutes)
+    else "%dm".format(remainingMinutes)
 }
