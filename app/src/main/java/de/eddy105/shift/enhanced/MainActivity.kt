@@ -57,6 +57,7 @@ private fun ShiftEnhancedApp() {
                 Text("Average current: ${session.averageCurrentMilliamps?.let { "$it mA" } ?: "Unavailable"}")
                 Text("Current range: ${metrics.minimumCurrentMilliamps?.let { "${metrics.minimumCurrentMilliamps} to ${metrics.maximumCurrentMilliamps} mA" } ?: "Unavailable"}")
                 Text("Battery change: ${metrics.capacityDeltaPercent?.let { "$it%" } ?: "Unavailable"}")
+                Text("Battery drain rate: ${metrics.batteryDrainPercentPerHour?.let { "%.2f%%/h".format(it) } ?: "Unavailable"}")
                 Text("Average temperature: ${metrics.averageTemperatureCelsius?.let { "%.1f °C".format(it) } ?: "Unavailable"}")
                 Text("Session data is kept in memory and is not persisted.")
             }
