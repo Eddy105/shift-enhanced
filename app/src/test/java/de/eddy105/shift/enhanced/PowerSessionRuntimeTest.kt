@@ -20,9 +20,16 @@ class PowerSessionRuntimeTest {
     }
 
     @Test
+    fun doesNotEstimateRuntimeWithInsufficientSamples() {
+        val metrics = PowerSessionMetrics(1, -1, -500, -500, null, 1.0)
+
+        assertNull(metrics.estimatedRuntimeMinutes(80))
+    }
+
+    @Test
     fun doesNotEstimateRuntimeWhenChargingOrCapacityIsMissing() {
-        val charging = PowerSessionMetrics(1, 1, -500, -500, null, -1.0)
-        val unknownCapacity = PowerSessionMetrics(1, -1, -500, -500, null, 1.0)
+        val charging = PowerSessionMetrics(2, 1, -500, -500, null, -1.0)
+        val unknownCapacity = PowerSessionMetrics(2, -1, -500, -500, null, 1.0)
 
         assertNull(charging.estimatedRuntimeMinutes(80))
         assertNull(unknownCapacity.estimatedRuntimeMinutes(null))
