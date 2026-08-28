@@ -8,7 +8,7 @@ package de.eddy105.shift.enhanced
  */
 fun PowerSessionMetrics.estimatedRuntimeMinutes(currentCapacityPercent: Int?): Long? {
     val drainRate = batteryDrainPercentPerHour ?: return null
-    if (sampleCount < 2 || drainRate <= 0.0 || currentCapacityPercent == null || currentCapacityPercent !in 1..100) {
+    if (sampleCount < 2 || !drainRate.isFinite() || drainRate <= 0.0 || currentCapacityPercent == null || currentCapacityPercent !in 1..100) {
         return null
     }
 
