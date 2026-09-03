@@ -41,4 +41,13 @@ class PowerSessionRuntimeTest {
 
         assertNull(metrics.estimatedRuntimeMinutes(0))
     }
+
+    @Test
+    fun doesNotEstimateRuntimeForNonFiniteDrainRate() {
+        val metrics = PowerSessionMetrics(2, -1, -500, -500, null, Double.NaN)
+        val infinite = PowerSessionMetrics(2, -1, -500, -500, null, Double.POSITIVE_INFINITY)
+
+        assertNull(metrics.estimatedRuntimeMinutes(80))
+        assertNull(infinite.estimatedRuntimeMinutes(80))
+    }
 }
