@@ -22,8 +22,10 @@ data class PowerTelemetry(
         get() = voltageMillivolts?.div(1000.0)
 
     val isCharging: Boolean
-        get() = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-            status == BatteryManager.BATTERY_STATUS_FULL
+        get() = status == BatteryManager.BATTERY_STATUS_CHARGING
+
+    val isFullyCharged: Boolean
+        get() = status == BatteryManager.BATTERY_STATUS_FULL
 }
 
 fun readPowerTelemetry(manager: BatteryManager, batteryIntent: Intent): PowerTelemetry =
