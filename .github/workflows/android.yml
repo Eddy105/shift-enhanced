@@ -30,6 +30,8 @@ jobs:
         run: gradle lintDebug
       - name: Debug APK
         run: gradle assembleDebug
+      - name: Verify debug APK
+        run: test -s app/build/outputs/apk/debug/app-debug.apk
       - name: Upload installable debug APK
         uses: actions/upload-artifact@v4
         with:
@@ -38,9 +40,23 @@ jobs:
           if-no-files-found: error
       - name: Release APK build validation
         run: gradle assembleRelease
+      - name: Verify release APK
+        run: test -s app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Generate APK checksums
+        run: |
+          sha256sum app/build/outputs/apk/debug/app-debug.apk > app/build/outputs/apk/debug/app-debug.apk.sha256
+          sha256sum app/build/outputs/apk/release/app-release-unsigned.apk > app/build/outputs/apk/release/app-release-unsigned.apk.sha256
       - name: Upload release APK
         uses: actions/upload-artifact@v4
         with:
           name: shift-enhanced-release-apk
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: |
+            app/build/outputs/apk/release/app-release-unsigned.apk
+            app/build/outputs/apk/release/app-release-unsigned.apk.sha256
+          if-no-files-found: error
+      - name: Upload debug APK checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: shift-enhanced-debug-apk-checksum
+          path: app/build/outputs/apk/debug/app-debug.apk.sha256
           if-no-files-found: error
