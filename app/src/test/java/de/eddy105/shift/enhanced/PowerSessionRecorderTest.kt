@@ -6,7 +6,7 @@ import org.junit.Test
 
 class PowerSessionRecorderTest {
     @Test
-    fun recordAddsTimestampedCurrentSample() {
+    fun recordUsesSuppliedMonotonicClockForSessionTiming() {
         var now = 1_000L
         val recorder = PowerSessionRecorder { now }
         val telemetry = PowerTelemetry(
@@ -24,6 +24,8 @@ class PowerSessionRecorderTest {
         recorder.record(telemetry.copy(currentMicros = 2_500_000))
 
         assertEquals(2, recorder.session.samples.size)
+        assertEquals(1_000L, recorder.session.samples.first().timestampMillis)
+        assertEquals(3_500L, recorder.session.samples.last().timestampMillis)
         assertEquals(2_500, recorder.session.durationMillis)
         assertEquals(2_000, recorder.session.averageCurrentMilliamps)
     }
